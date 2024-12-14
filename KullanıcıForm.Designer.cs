@@ -67,22 +67,30 @@
 			// textBox2
 			// 
 			textBox2.BorderStyle = BorderStyle.None;
+			textBox2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
 			textBox2.Location = new Point(155, 167);
 			textBox2.Multiline = true;
 			textBox2.Name = "textBox2";
 			textBox2.Size = new Size(214, 41);
 			textBox2.TabIndex = 1;
+			textBox2.Text = "Şifre";
 			textBox2.TextChanged += textBox2_TextChanged;
 			// 
 			// textBox1
 			// 
+			textBox1.BackColor = SystemColors.Window;
 			textBox1.BorderStyle = BorderStyle.None;
+			textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+			textBox1.ForeColor = SystemColors.WindowText;
 			textBox1.Location = new Point(155, 97);
 			textBox1.Multiline = true;
 			textBox1.Name = "textBox1";
-			textBox1.Size = new Size(214, 39);
+			textBox1.Size = new Size(214, 40);
 			textBox1.TabIndex = 0;
+			textBox1.Text = "Kullanıcı Adı";
 			textBox1.TextChanged += textBox1_TextChanged;
+			textBox1.Enter += TextBox_Enter;
+			textBox1.Leave += TextBox_Leave;
 			// 
 			// KullanıcıForm
 			// 
@@ -92,6 +100,7 @@
 			Controls.Add(panel1);
 			Name = "KullanıcıForm";
 			Text = "KullanıcıForm";
+			Load += KullanıcıForm_Load;
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
 			ResumeLayout(false);
