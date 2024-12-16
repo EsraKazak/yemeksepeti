@@ -58,9 +58,23 @@ namespace yemeksepeti
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			Alisverisform avm =new Alisverisform();
-			this.Hide();
-			avm.Show();
+
+			string username = textBox1.Text;
+			string password = textBox2.Text;
+
+			Sorgu userService = new Sorgu();
+			bool isValidUser = userService.ValidateUser(username, password);
+
+			if (isValidUser)
+			{
+				Alisverisform avm=new Alisverisform();
+				avm.Show();
+				
+			}
+			else
+			{
+				MessageBox.Show("Geçersiz kullanıcı adı veya şifre!");
+			}
 		}
 
 		private void KullanıcıForm_Load(object sender, EventArgs e)

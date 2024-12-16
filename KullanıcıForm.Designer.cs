@@ -56,7 +56,7 @@
 			button1.FlatAppearance.MouseOverBackColor = Color.Transparent;
 			button1.FlatStyle = FlatStyle.Flat;
 			button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-			button1.Location = new Point(195, 244);
+			button1.Location = new Point(189, 195);
 			button1.Name = "button1";
 			button1.Size = new Size(134, 39);
 			button1.TabIndex = 2;
@@ -68,12 +68,12 @@
 			// 
 			textBox2.BorderStyle = BorderStyle.None;
 			textBox2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-			textBox2.Location = new Point(155, 167);
-			textBox2.Multiline = true;
+			textBox2.Location = new Point(155, 146);
 			textBox2.Name = "textBox2";
-			textBox2.Size = new Size(214, 41);
+			textBox2.Size = new Size(214, 27);
 			textBox2.TabIndex = 1;
 			textBox2.Text = "Şifre";
+			textBox2.UseSystemPasswordChar = true;
 			textBox2.TextChanged += textBox2_TextChanged;
 			// 
 			// textBox1
@@ -83,9 +83,8 @@
 			textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
 			textBox1.ForeColor = SystemColors.WindowText;
 			textBox1.Location = new Point(155, 97);
-			textBox1.Multiline = true;
 			textBox1.Name = "textBox1";
-			textBox1.Size = new Size(214, 40);
+			textBox1.Size = new Size(214, 27);
 			textBox1.TabIndex = 0;
 			textBox1.Text = "Kullanıcı Adı";
 			textBox1.TextChanged += textBox1_TextChanged;
