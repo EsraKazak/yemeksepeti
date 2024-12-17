@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace yemeksepeti
 {
@@ -44,6 +46,7 @@ namespace yemeksepeti
 				while (reader.Read())
 				{
 					// Verileri tablodan çekiyoruz
+					int urunID = Convert.ToInt32(reader["ProductID"]);
 					string resimYolu = reader["image"].ToString(); // Resim yolu
 					string productName = reader["ProductName"].ToString(); // Ürün adı
 					int stok = Convert.ToInt32(reader["Stok"]); // Stok miktarı
@@ -72,11 +75,15 @@ namespace yemeksepeti
 					pictureBox.Click += (s, ev) =>
 					{
 						// Detay formunu gösterelim
-						Alisverisform detayForm = new Alisverisform();
-						/*detayForm.Goster(resim, tarifAdi, hazirlamaSuresiDb.ToString(), talimat, tarifID);
-						detayForm.ShowDialog();
-						this.Hide();*/
+						UrunPage urun = new UrunPage();
+						urun.Goster(resim, productName, price, urunID); // Bilgileri geçiriyoruz
+
+						this.Hide(); 
+						urun.ShowDialog(); // UrunPage'i modal olarak göster
+						this.Show(); // UrunPage kapandıktan sonra AlisverisForm'u yeniden göster
 					};
+
+
 
 
 					// Panel'e PictureBox ve Label ekle

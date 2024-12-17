@@ -24,7 +24,38 @@ namespace yemeksepeti
 
 		public bool ValidateUser(string username, string password)
 		{
-			string query = "SELECT COUNT(1) FROM yemeksiparis.dbo.Custemurs WHERE CustomerName = @Username AND CustomerPassword = @Password";
+			string query = "SELECT CustomerID FROM yemeksiparis.dbo.Custemurs WHERE CustomerName = @Username AND CustomerPassword = @Password";
+
+
+
+			using (SqlConnection con = new SqlConnection(connectionString))
+			{
+				try
+				{
+					con.Open();
+					SqlCommand cmd = new SqlCommand(query, con);
+
+					// Parametreleri ekleyelim
+					cmd.Parameters.AddWithValue("@Username", username);
+					cmd.Parameters.AddWithValue("@Password", password);
+
+					// Sorguyu çalıştırıp sonucu alalım
+					int result = Convert.ToInt32(cmd.ExecuteScalar());
+
+					return result == 1;
+				}
+				catch (Exception ex)
+				{
+					// Hata durumunda false döndür
+					throw new Exception("Veritabanı hatası: " + ex.Message);
+				}
+			}
+		}
+
+
+		public bool ValidateAdmin(string username, string password)
+		{
+			string query = "SELECT COUNT(1) FROM yemeksiparis.dbo.Admin WHERE adminname = @Username AND adminpassword = @Password";
 
 
 

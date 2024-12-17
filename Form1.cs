@@ -12,7 +12,14 @@ namespace yemeksepeti
 			KullanýcýForm kullanýcý = new KullanýcýForm();
 			this.Hide();
 			kullanýcý.Show();
-			
+
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			AdminLogin adm=new AdminLogin();
+			this.Hide();
+			adm.Show();
 		}
 	}
 }
