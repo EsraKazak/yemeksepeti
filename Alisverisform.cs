@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,15 +16,22 @@ namespace yemeksepeti
 {
 	public partial class Alisverisform : Form
 	{
+		 int userıd=0;
 		public Alisverisform()
 		{
 			InitializeComponent();
-			ResimleriGetir();
+			
+
 		}
 
 		private void Alisverisform_Load(object sender, EventArgs e)
 		{
-
+			MessageBox.Show($"avm Kullanıcı ID: {userıd}");
+			ResimleriGetir();
+		}
+		public void SetUserId(int id)
+		{
+			this.userıd = id;
 		}
 
 		private void ResimleriGetir()
@@ -64,7 +72,7 @@ namespace yemeksepeti
 
 					// Açıklamalar için Label oluştur
 					Label label = new Label();
-					label.Text = $"Ürün Adı: {productName}\nStok: {stok}\nFiyat: {price:C}";
+					label.Text = $"Ürün Adı: {productName}\nStok: {stok}\nFiyat: {price:C}\nId: {userıd}";
 					label.AutoSize = false;
 					label.Size = new Size(300, 150); // Açıklama alanı genişliği
 					label.Font = new Font("Arial", 10, FontStyle.Regular);
@@ -78,7 +86,7 @@ namespace yemeksepeti
 						UrunPage urun = new UrunPage();
 						urun.Goster(resim, productName, price, urunID); // Bilgileri geçiriyoruz
 
-						this.Hide(); 
+						this.Hide();
 						urun.ShowDialog(); // UrunPage'i modal olarak göster
 						this.Show(); // UrunPage kapandıktan sonra AlisverisForm'u yeniden göster
 					};
@@ -93,10 +101,15 @@ namespace yemeksepeti
 					// Dikey pozisyonu güncelle (Bir sonraki ürün için)
 					yPos += pictureBox.Height + padding; // Bir sonraki resim altına eklenir
 				}
-			reader.Close();
+				reader.Close();
 			}
 
 
+		}
+
+		private void label1_Click(object sender, EventArgs e)
+		{
+			
 		}
 	}
 }

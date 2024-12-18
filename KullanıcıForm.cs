@@ -12,6 +12,7 @@ namespace yemeksepeti
 {
 	public partial class KullanıcıForm : Form
 	{
+		
 		public KullanıcıForm()
 		{
 			InitializeComponent();
@@ -59,17 +60,21 @@ namespace yemeksepeti
 		private void button1_Click(object sender, EventArgs e)
 		{
 
-			string username = textBox1.Text;
-			string password = textBox2.Text;
+			string username = textBox1.Text.Trim();
+			string password = textBox2.Text.Trim();
 
-			Sorgu userService = new Sorgu();
-			bool isValidUser = userService.ValidateUser(username, password);
+			Sorgu sorgu = new Sorgu();
+			int userId;
 
-			if (isValidUser)
+			bool isValid = sorgu.ValidateUser(username, password, out userId);
+
+			if (isValid)
 			{
-				Alisverisform avm=new Alisverisform();
+				MessageBox.Show($"Giriş başarılı! Kullanıcı ID: {userId}");
+				Alisverisform avm = new Alisverisform();
+				avm.SetUserId(userId);
 				avm.Show();
-				
+				//this.Hide();
 			}
 			else
 			{
