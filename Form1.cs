@@ -10,7 +10,7 @@ namespace yemeksepeti
 		private void button1_Click(object sender, EventArgs e)
 		{
 			KullanýcýForm kullanýcý = new KullanýcýForm();
-			this.Hide();
+			//this.Hide();
 			kullanýcý.Show();
 
 		}

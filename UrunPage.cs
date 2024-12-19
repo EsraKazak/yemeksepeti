@@ -13,6 +13,9 @@ namespace yemeksepeti
 {
 	public partial class UrunPage : Form
 	{
+		private int UserID;
+		private int urunID;
+		private decimal urunFiyat;
 		public UrunPage()
 		{
 			InitializeComponent();
@@ -23,25 +26,44 @@ namespace yemeksepeti
 
 		}
 
-		public void Goster(Image resim, string urunAd, decimal fiyat,int ID)
+		public void Goster(Image resim, string urunAd, decimal fiyat,int urunID, int userıd)
 		{
+			this.urunID= urunID;
+			this.urunFiyat= fiyat;
+			this.UserID = userıd;
 			pictureBox1.Image = resim;
 			label1.Text = urunAd;
 			label2.Text = $"Fiyat: {fiyat:C}";
-
-			//TarifID = tarifID;
-
-			// Malzemeleri veritabanından çek ve listbox'a ekle
-			/*List<string> malzemeler = sorgu.GetTarifMalzemeler(tarifID);
-			listBox1.Items.Clear(); // ListBox'ı temizle
-			foreach (string malzeme in malzemeler)
-			{
-				listBox1.Items.Add(malzeme); // Malzemeleri listbox'a ekle
-			}*/
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
+			int adet=(int)numericUpDown1.Value;
+			if(adet>5)
+			{
+				MessageBox.Show("en fazla 5 adet sipariş verebilirsiniz!");
+				return;
+			}
+			decimal toplamFiyat = adet * urunFiyat;
+
+			try
+			{
+				Sorgu sorgu = new Sorgu();
+				bool isSuccess = sorgu.SiparisEkleme(UserID, urunID, adet, toplamFiyat);
+
+				if (isSuccess)
+				{
+					MessageBox.Show("Ürün başarıyla sepete eklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show("Sepete eklenirken bir hata oluştu!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 
 		}
 	}

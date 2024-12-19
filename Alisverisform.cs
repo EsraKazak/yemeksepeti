@@ -16,17 +16,19 @@ namespace yemeksepeti
 {
 	public partial class Alisverisform : Form
 	{
-		 int userıd=0;
-		public Alisverisform()
+		private int userıd = 0;
+		public Alisverisform(int id)
 		{
 			InitializeComponent();
-			
-
+			this.userıd = id;
 		}
 
 		private void Alisverisform_Load(object sender, EventArgs e)
 		{
-			MessageBox.Show($"avm Kullanıcı ID: {userıd}");
+			// Kullanıcı ID ile bir işlem örneği
+			MessageBox.Show($"AVM Kullanıcı ID: {userıd}");
+
+			// Kullanıcıya özel resimleri getirme işlemi
 			ResimleriGetir();
 		}
 		public void SetUserId(int id)
@@ -84,11 +86,11 @@ namespace yemeksepeti
 					{
 						// Detay formunu gösterelim
 						UrunPage urun = new UrunPage();
-						urun.Goster(resim, productName, price, urunID); // Bilgileri geçiriyoruz
+						urun.Goster(resim, productName, price, urunID, userıd); // Bilgileri geçiriyoruz
 
-						this.Hide();
+						//this.Hide();
 						urun.ShowDialog(); // UrunPage'i modal olarak göster
-						this.Show(); // UrunPage kapandıktan sonra AlisverisForm'u yeniden göster
+										   //this.Show(); // UrunPage kapandıktan sonra AlisverisForm'u yeniden göster
 					};
 
 
@@ -109,7 +111,12 @@ namespace yemeksepeti
 
 		private void label1_Click(object sender, EventArgs e)
 		{
-			
+
+		}
+
+		private void panel1_Paint(object sender, PaintEventArgs e)
+		{
+
 		}
 	}
 }

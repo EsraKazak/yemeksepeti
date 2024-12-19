@@ -59,6 +59,39 @@ namespace yemeksepeti
 
 
 
+		public bool SiparisEkleme(int customerId, int productId, int quantity, decimal totalPrice)
+		{
+			try
+			{
+				using (SqlConnection connection = new SqlConnection(connectionString))
+				{
+					connection.Open();
+
+					string query = @"
+                        INSERT INTO yemeksiparis.dbo.Orders (CustemerID, ProductID, Quantity, TotalPrice, OrderDate, OrderStatus) 
+                        VALUES (@CustomerID, @ProductID, @Quantity, @TotalPrice, @OrderDate, @OrderStatus)";
+
+					using (SqlCommand cmd = new SqlCommand(query, connection))
+					{
+						cmd.Parameters.AddWithValue("@CustomerID", customerId);
+						cmd.Parameters.AddWithValue("@ProductID", productId);
+						cmd.Parameters.AddWithValue("@Quantity", quantity);
+						cmd.Parameters.AddWithValue("@TotalPrice", totalPrice);
+						cmd.Parameters.AddWithValue("@OrderDate", DateTime.Now); 
+						cmd.Parameters.AddWithValue("@OrderStatus", "Bekliyor"); 
+
+						int rowsAffected = cmd.ExecuteNonQuery(); // Veritabanına veri ekle
+						return rowsAffected > 0; 
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Veritabanı hatası: {ex.Message}");
+				return false; 
+			}
+		}
+
 		public bool ValidateAdmin(string username, string password)
 		{
 			string query = "SELECT COUNT(1) FROM yemeksiparis.dbo.Admin WHERE adminname = @Username AND adminpassword = @Password";

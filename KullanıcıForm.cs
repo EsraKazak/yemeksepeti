@@ -59,10 +59,11 @@ namespace yemeksepeti
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-
+			// Kullanıcı adı ve şifre girişlerini al
 			string username = textBox1.Text.Trim();
 			string password = textBox2.Text.Trim();
 
+			// Sorgu nesnesi ile kullanıcı doğrulama
 			Sorgu sorgu = new Sorgu();
 			int userId;
 
@@ -70,17 +71,32 @@ namespace yemeksepeti
 
 			if (isValid)
 			{
+				// Başarılı giriş mesajı
 				MessageBox.Show($"Giriş başarılı! Kullanıcı ID: {userId}");
-				Alisverisform avm = new Alisverisform();
-				avm.SetUserId(userId);
-				avm.Show();
-				//this.Hide();
+
+				// Alışveriş formunu ayrı bir iş parçacığında çalıştır
+				Task.Run(() =>
+				{
+					// Kullanıcı ID'si ile alışveriş formunu oluştur
+					Alisverisform avm = new Alisverisform(userId);
+
+					// Form kapandığında thread'i sonlandır
+					avm.FormClosed += (s, args) => Application.ExitThread();
+
+					// Formu çalıştır
+					Application.Run(avm);
+				});
+
+				// Mevcut formu gizlemek isterseniz (isteğe bağlı)
+				// this.Hide();
 			}
 			else
 			{
+				// Geçersiz giriş mesajı
 				MessageBox.Show("Geçersiz kullanıcı adı veya şifre!");
 			}
 		}
+
 
 		private void KullanıcıForm_Load(object sender, EventArgs e)
 		{
