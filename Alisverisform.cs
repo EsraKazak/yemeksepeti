@@ -118,5 +118,11 @@ namespace yemeksepeti
 		{
 
 		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			Sorgu sorgu = new Sorgu();
+			sorgu.getorder(userıd);
+		}
 	}
 }

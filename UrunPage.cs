@@ -13,6 +13,8 @@ namespace yemeksepeti
 {
 	public partial class UrunPage : Form
 	{
+
+
 		private int UserID;
 		private int urunID;
 		private decimal urunFiyat;
@@ -38,32 +40,27 @@ namespace yemeksepeti
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			int adet=(int)numericUpDown1.Value;
-			if(adet>5)
+			int adet = (int)numericUpDown1.Value;
+
+			if (adet > 5)
 			{
-				MessageBox.Show("en fazla 5 adet sipariş verebilirsiniz!");
+				MessageBox.Show("En fazla 5 adet sipariş verebilirsiniz!");
 				return;
 			}
-			decimal toplamFiyat = adet * urunFiyat;
 
-			try
+			// SepetItem oluştur
+			Sepet yeniUrun = new Sepet
 			{
-				Sorgu sorgu = new Sorgu();
-				bool isSuccess = sorgu.SiparisEkleme(UserID, urunID, adet, toplamFiyat);
+				ProductID = urunID,
+				ProductName = label1.Text,
+				Quantity = adet,
+				UnitPrice = urunFiyat
+			};
 
-				if (isSuccess)
-				{
-					MessageBox.Show("Ürün başarıyla sepete eklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-				else
-				{
-					MessageBox.Show("Sepete eklenirken bir hata oluştu!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
+			// Kullanıcıya özel sepete ekle
+			SepetManager.SepeteEkle(UserID, yeniUrun);
+
+			MessageBox.Show("Ürün sepete eklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 		}
 	}

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace yemeksepeti
 {
@@ -15,6 +17,8 @@ namespace yemeksepeti
 		{
 			get { return connectionString; }
 		}
+
+		private int userıd;
 
 		public static string ResimleriGetirSorgusu()
 		{
@@ -121,5 +125,56 @@ namespace yemeksepeti
 				}
 			}
 		}
-	}
+
+
+		public void getorder(int userdID)
+		{
+			this.userıd=userdID;
+			// SQL Sorgusu
+			string query = @"
+            SELECT 
+                p.ProductName,
+                p.Price AS UnitPrice,
+                o.Quantity,
+                (p.Price * o.Quantity) AS TotalPrice
+            FROM 
+               yemeksiparis.dbo.Orders AS o
+            INNER JOIN 
+               yemeksiparis.dbo.Products AS p ON o.ProductID = p.ProductID
+            WHERE 
+                o.CustemerID = @CustomerID";
+
+			try
+			{
+				using (SqlConnection connection = new SqlConnection(connectionString))
+				{
+					connection.Open(); // Bağlantıyı açıyoruz
+
+					using (SqlCommand command = new SqlCommand(query, connection))
+					{
+						// Parametreyi ekliyoruz
+						command.Parameters.AddWithValue("@CustomerID", userdID);
+
+						using (SqlDataReader reader = command.ExecuteReader())
+						{
+							DataTable dt = new DataTable();
+							dt.Load(reader);
+
+							// Veriyi başka bir forma gönderiyoruz
+							SepetForm detayForm = new SepetForm(userdID);
+							detayForm.SiparisVerisiniYolla(dt);
+							detayForm.Show();
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Veri alınırken bir hata oluştu: " + ex.Message);
+			}
+
+
+
+		}
+}
 }

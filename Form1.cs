@@ -18,7 +18,7 @@ namespace yemeksepeti
 		private void button2_Click(object sender, EventArgs e)
 		{
 			AdminLogin adm=new AdminLogin();
-			this.Hide();
+			//this.Hide();
 			adm.Show();
 		}
 	}

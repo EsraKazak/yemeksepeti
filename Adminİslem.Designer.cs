@@ -103,6 +103,7 @@
 			Controls.Add(panel1);
 			Name = "Adminİslem";
 			Text = "Adminİslem";
+			FormClosing += AdminForm_FormClosing;
 			Load += Adminİslem_Load;
 			panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
