@@ -47,44 +47,45 @@
 			panel1.Controls.Add(dataGridView1);
 			panel1.Location = new Point(0, 2);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(801, 448);
+			panel1.Size = new Size(959, 520);
 			panel1.TabIndex = 0;
 			// 
 			// button4
 			// 
-			button4.Location = new Point(707, 210);
+			button4.Location = new Point(809, 255);
 			button4.Name = "button4";
-			button4.Size = new Size(94, 29);
+			button4.Size = new Size(140, 29);
 			button4.TabIndex = 4;
-			button4.Text = "button4";
+			button4.Text = "Stok Güncelle";
 			button4.UseVisualStyleBackColor = true;
 			// 
 			// button3
 			// 
-			button3.Location = new Point(707, 155);
+			button3.Location = new Point(809, 220);
 			button3.Name = "button3";
-			button3.Size = new Size(94, 29);
+			button3.Size = new Size(140, 29);
 			button3.TabIndex = 3;
-			button3.Text = "button3";
+			button3.Text = "Fiyat Güncelle";
 			button3.UseVisualStyleBackColor = true;
 			// 
 			// button2
 			// 
-			button2.Location = new Point(704, 94);
+			button2.Location = new Point(809, 185);
 			button2.Name = "button2";
-			button2.Size = new Size(94, 29);
+			button2.Size = new Size(140, 29);
 			button2.TabIndex = 2;
-			button2.Text = "button2";
+			button2.Text = "Ürün Ekle\r\n";
 			button2.UseVisualStyleBackColor = true;
 			// 
 			// button1
 			// 
-			button1.Location = new Point(704, 43);
+			button1.Location = new Point(809, 150);
 			button1.Name = "button1";
-			button1.Size = new Size(94, 29);
+			button1.Size = new Size(140, 29);
 			button1.TabIndex = 1;
-			button1.Text = "button1";
+			button1.Text = "Siparişleri Onayla";
 			button1.UseVisualStyleBackColor = true;
+			button1.Click += button1_Click;
 			// 
 			// dataGridView1
 			// 
@@ -92,14 +93,14 @@
 			dataGridView1.Location = new Point(3, 0);
 			dataGridView1.Name = "dataGridView1";
 			dataGridView1.RowHeadersWidth = 51;
-			dataGridView1.Size = new Size(652, 445);
+			dataGridView1.Size = new Size(800, 520);
 			dataGridView1.TabIndex = 0;
 			// 
 			// Adminİslem
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 450);
+			ClientSize = new Size(961, 524);
 			Controls.Add(panel1);
 			Name = "Adminİslem";
 			Text = "Adminİslem";

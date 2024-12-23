@@ -29,7 +29,7 @@ namespace yemeksepeti
 		public bool ValidateUser(string username, string password, out int userId)
 		{
 			userId = 0; // Varsayılan değer, kullanıcı bulunamazsa 0 dönecek
-			string query = "SELECT CustomerID FROM yemeksiparis.dbo.Custemurs WHERE CustomerName = @Username AND CustomerPassword = @Password";
+			string query = "SELECT CustomerID FROM yemeksiparis.dbo.Custemers WHERE CustomerName = @Username AND CustomerPassword = @Password";
 
 			using (SqlConnection con = new SqlConnection(connectionString))
 			{
