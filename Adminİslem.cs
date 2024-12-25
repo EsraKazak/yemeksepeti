@@ -44,6 +44,12 @@ namespace yemeksepeti
 		{
 			List<Siparis> orders = GetOrdersFromDatabase();
 
+			// Siparişler için öncelik puanlarını hesapla
+			foreach (var order in orders)
+			{
+				order.PrioritizationScore = CalculatePrioritizationScore(order.CustemerID, order.OrderDate);
+			}
+
 			// Siparişleri öncelik skorlarına göre sırala
 			var orderedByPriority = orders.OrderByDescending(o => o.PrioritizationScore).ToList();
 
@@ -54,16 +60,11 @@ namespace yemeksepeti
 			});
 		}
 
+
 		public static string connectionString = "Data Source=DESKTOP-IANIHDI\\SQLEXPRESS;Initial Catalog=tarif;Integrated Security=True";
 
 		// Sipariş sınıfı, her siparişin öncelik skoru ile birlikte hesaplanmasını sağlar
-		public class Siparis
-		{
-			public int OrderID { get; set; }
-			public int CustemerID { get; set; }  // Bu doğru şekilde güncellenecek
-			public DateTime OrderDate { get; set; }
-			public double PrioritizationScore { get; set; }
-		}
+
 
 		private List<Siparis> GetOrdersFromDatabase()
 		{
@@ -112,16 +113,26 @@ namespace yemeksepeti
 				order.PrioritizationScore = CalculatePrioritizationScore(order.CustemerID, order.OrderDate);
 			}
 
+			progressBar1.Minimum = 0;
+			progressBar1.Maximum = 100;
+			progressBar1.Value = 0;
+
 			// Siparişleri öncelik sırasına göre sıralıyoruz
 			var sortedOrders = orders.OrderByDescending(o => o.PrioritizationScore).ToList();
+
+
+			
 
 			// Siparişleri sırayla işliyoruz
 			foreach (var order in sortedOrders)
 			{
+				int orderId = order.OrderID;
 				int customerId = order.CustemerID;
-
+				progressBar1.Value = 0;
 				// Bütçe kontrolü ile siparişi onaylıyoruz
 				await ApproveOrderAsync(order.OrderID, customerId);
+
+				
 			}
 		}
 
@@ -176,36 +187,43 @@ namespace yemeksepeti
 
 			try
 			{
-				// Müşterinin bütçesini al
-				double customerBudget = GetCustomerBudget(customerId);
 
-				// Siparişin toplam fiyatını al
+				for (int i = 0; i <= 100; i += 20)
+				{
+					// ProgressBar'ı güncelle
+					progressBar1.Value = i;
+					progressBar1.Refresh();
+
+					// İşlem simülasyonu için bekle
+					await Task.Delay(500); // Simülasyon süresi
+				}
+
+				// Siparişin işlenebilirliğini kontrol et
+				if (!IsOrderProcessable(orderId, customerId, out string failureReason))
+				{
+					MessageBox.Show($"Sipariş {orderId} onaylanmadı: {failureReason}", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+				}
+
+				// Siparişi onayla
+				using (SqlConnection connection = new SqlConnection(connectionString))
+				{
+					string query = "UPDATE yemeksiparis.dbo.Orders SET OrderStatus = 'Onaylandı' WHERE OrderID = @OrderID";
+					SqlCommand command = new SqlCommand(query, connection);
+					command.Parameters.AddWithValue("@OrderID", orderId);
+
+					connection.Open();
+					command.ExecuteNonQuery();
+				}
+
+				// Stok güncelle
+				UpdateStock(orderId);
+
+				// Müşteri bütçesini güncelle
 				double totalOrderPrice = GetOrderTotalPrice(orderId);
+				UpdateCustomerBudget(customerId, totalOrderPrice);
 
-				// Bütçeyi kontrol et
-				if (totalOrderPrice <= customerBudget)
-				{
-					// Bütçeyi aşmıyorsa siparişi onayla
-					using (SqlConnection connection = new SqlConnection(connectionString))
-					{
-						string query = "UPDATE yemeksiparis.dbo.Orders SET OrderStatus = 'Onaylandı' WHERE OrderID = @OrderID";
-						SqlCommand command = new SqlCommand(query, connection);
-						command.Parameters.AddWithValue("@OrderID", orderId);
-
-						connection.Open();
-						command.ExecuteNonQuery();
-					}
-
-					// Sipariş onaylandığında müşterinin bütçesini güncelle
-					UpdateCustomerBudget(customerId, totalOrderPrice);
-
-					MessageBox.Show($"Sipariş {orderId} onaylandı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-				else
-				{
-					// Bütçeyi aşıyorsa siparişi reddet
-					MessageBox.Show($"Sipariş {orderId} bütçeyi aşıyor ve onaylanmadı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				}
+				MessageBox.Show($"Sipariş {orderId} onaylandı ve işlemler tamamlandı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			catch (Exception ex)
 			{
@@ -213,12 +231,40 @@ namespace yemeksepeti
 			}
 			finally
 			{
-				semaphore.Release();  // Semafor iznini serbest bırak
+				semaphore.Release(); // Semaforu serbest bırak
 			}
 
 			// Siparişler güncelleniyor
 			RefreshOrders();
 		}
+
+		private void UpdateStock(int orderId)
+		{
+			string query = @"
+        UPDATE p
+        SET p.Stok = p.Stok - od.Quantity
+        FROM yemeksiparis.dbo.Products p
+        INNER JOIN yemeksiparis.dbo.Orders od ON p.ProductID = od.ProductID
+        WHERE od.OrderID = @OrderID";
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				try
+				{
+					SqlCommand command = new SqlCommand(query, connection);
+					command.Parameters.AddWithValue("@OrderID", orderId);
+
+					connection.Open();
+					command.ExecuteNonQuery();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show($"Stok güncellenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+
 
 		// Müşterinin bütçesini güncelleyen fonksiyon
 		private void UpdateCustomerBudget(int customerId, double totalOrderPrice)
@@ -331,5 +377,70 @@ namespace yemeksepeti
 			return customerId;
 		}
 
+		private bool IsOrderProcessable(int orderId, int customerId, out string failureReason)
+		{
+			failureReason = string.Empty;
+
+			// Müşteri bütçesini kontrol et
+			double customerBudget = GetCustomerBudget(customerId);
+			double totalOrderPrice = GetOrderTotalPrice(orderId);
+
+			if (totalOrderPrice > customerBudget)
+			{
+				failureReason = "Sipariş, müşteri bütçesini aşıyor.";
+				return false;
+			}
+
+			// Sipariş için stok kontrolü
+			if (!IsStockSufficient(orderId, out string stockIssue))
+			{
+				failureReason = stockIssue;
+				return false;
+			}
+
+			return true; // Hem bütçe hem stok yeterliyse
+		}
+
+		private bool IsStockSufficient(int orderId, out string failureReason)
+		{
+			failureReason = string.Empty;
+
+			string query = @"
+        SELECT od.ProductID, od.Quantity, p.Stok
+        FROM yemeksiparis.dbo.Orders od
+        INNER JOIN yemeksiparis.dbo.Products p ON od.ProductID = p.ProductID
+        WHERE od.OrderID = @OrderID";
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				SqlCommand command = new SqlCommand(query, connection);
+				command.Parameters.AddWithValue("@OrderID", orderId);
+
+				connection.Open();
+				SqlDataReader reader = command.ExecuteReader();
+
+				while (reader.Read())
+				{
+					int productId = reader.GetInt32(reader.GetOrdinal("ProductID"));
+					int quantity = reader.GetInt32(reader.GetOrdinal("Quantity"));
+					int stock = reader.GetInt32(reader.GetOrdinal("Stok"));
+
+					if (quantity > stock)
+					{
+						failureReason = $"Ürün {productId} için yeterli stok yok!";
+						return false;
+					}
+				}
+			}
+
+			return true; // Tüm ürünler için yeterli stok varsa
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			FiyatStok_güncelle fs=new FiyatStok_güncelle();
+			this.Close();
+			fs.Show();
+		}
 	}
 }

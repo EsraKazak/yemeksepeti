@@ -33,12 +33,14 @@
 			label1 = new Label();
 			button2 = new Button();
 			button1 = new Button();
+			button3 = new Button();
 			panel1.SuspendLayout();
 			SuspendLayout();
 			// 
 			// panel1
 			// 
 			panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+			panel1.Controls.Add(button3);
 			panel1.Controls.Add(label1);
 			panel1.Controls.Add(button2);
 			panel1.Controls.Add(button1);
@@ -91,6 +93,23 @@
 			button1.UseVisualStyleBackColor = false;
 			button1.Click += button1_Click;
 			// 
+			// button3
+			// 
+			button3.BackColor = Color.Transparent;
+			button3.FlatAppearance.BorderSize = 0;
+			button3.FlatAppearance.MouseDownBackColor = Color.Transparent;
+			button3.FlatAppearance.MouseOverBackColor = Color.Transparent;
+			button3.FlatStyle = FlatStyle.Flat;
+			button3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+			button3.ForeColor = Color.Black;
+			button3.Location = new Point(153, 99);
+			button3.Name = "button3";
+			button3.Size = new Size(191, 48);
+			button3.TabIndex = 3;
+			button3.Text = "Üye Ol";
+			button3.UseVisualStyleBackColor = false;
+			button3.Click += button3_Click;
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
@@ -110,5 +129,6 @@
 		private Label label1;
 		private Button button2;
 		private Button button1;
+		private Button button3;
 	}
 }

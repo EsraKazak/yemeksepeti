@@ -29,18 +29,18 @@
 		private void InitializeComponent()
 		{
 			panel1 = new Panel();
-			button4 = new Button();
 			button3 = new Button();
 			button2 = new Button();
 			button1 = new Button();
 			dataGridView1 = new DataGridView();
+			progressBar1 = new ProgressBar();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			SuspendLayout();
 			// 
 			// panel1
 			// 
-			panel1.Controls.Add(button4);
+			panel1.Controls.Add(progressBar1);
 			panel1.Controls.Add(button3);
 			panel1.Controls.Add(button2);
 			panel1.Controls.Add(button1);
@@ -50,27 +50,19 @@
 			panel1.Size = new Size(959, 520);
 			panel1.TabIndex = 0;
 			// 
-			// button4
-			// 
-			button4.Location = new Point(809, 255);
-			button4.Name = "button4";
-			button4.Size = new Size(140, 29);
-			button4.TabIndex = 4;
-			button4.Text = "Stok Güncelle";
-			button4.UseVisualStyleBackColor = true;
-			// 
 			// button3
 			// 
-			button3.Location = new Point(809, 220);
+			button3.Location = new Point(809, 399);
 			button3.Name = "button3";
-			button3.Size = new Size(140, 29);
+			button3.Size = new Size(140, 60);
 			button3.TabIndex = 3;
-			button3.Text = "Fiyat Güncelle";
+			button3.Text = "Fiyat ve Stok Güncelle";
 			button3.UseVisualStyleBackColor = true;
+			button3.Click += button3_Click;
 			// 
 			// button2
 			// 
-			button2.Location = new Point(809, 185);
+			button2.Location = new Point(809, 364);
 			button2.Name = "button2";
 			button2.Size = new Size(140, 29);
 			button2.TabIndex = 2;
@@ -79,7 +71,7 @@
 			// 
 			// button1
 			// 
-			button1.Location = new Point(809, 150);
+			button1.Location = new Point(809, 329);
 			button1.Name = "button1";
 			button1.Size = new Size(140, 29);
 			button1.TabIndex = 1;
@@ -95,6 +87,13 @@
 			dataGridView1.RowHeadersWidth = 51;
 			dataGridView1.Size = new Size(800, 520);
 			dataGridView1.TabIndex = 0;
+			// 
+			// progressBar1
+			// 
+			progressBar1.Location = new Point(804, 26);
+			progressBar1.Name = "progressBar1";
+			progressBar1.Size = new Size(155, 29);
+			progressBar1.TabIndex = 4;
 			// 
 			// Adminİslem
 			// 
@@ -114,10 +113,10 @@
 		#endregion
 
 		private Panel panel1;
-		private Button button4;
 		private Button button3;
 		private Button button2;
 		private Button button1;
 		private DataGridView dataGridView1;
+		private ProgressBar progressBar1;
 	}
 }
