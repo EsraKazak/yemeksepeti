@@ -63,7 +63,7 @@ namespace yemeksepeti
 
 		public static string connectionString = "Data Source=DESKTOP-IANIHDI\\SQLEXPRESS;Initial Catalog=tarif;Integrated Security=True";
 
-		
+
 
 
 		private List<Siparis> GetOrdersFromDatabase()
@@ -71,7 +71,11 @@ namespace yemeksepeti
 			List<Siparis> orders = new List<Siparis>();
 
 			
-			string query = "SELECT OrderID, CustemerID, OrderDate FROM yemeksiparis.dbo.Orders WHERE OrderStatus = 'Bekliyor'";
+			string query = @"
+        SELECT o.OrderID, o.CustemerID, o.OrderDate, c.CustomerType 
+        FROM yemeksiparis.dbo.Orders o
+        INNER JOIN yemeksiparis.dbo.Custemers c ON o.CustemerID = c.CustomerID
+        WHERE o.OrderStatus = 'Bekliyor'";
 
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
@@ -84,14 +88,16 @@ namespace yemeksepeti
 					orders.Add(new Siparis
 					{
 						OrderID = reader.GetInt32(reader.GetOrdinal("OrderID")),
-						CustemerID = reader.GetInt32(reader.GetOrdinal("CustemerID")), 
-						OrderDate = reader.GetDateTime(reader.GetOrdinal("OrderDate"))
+						CustemerID = reader.GetInt32(reader.GetOrdinal("CustemerID")),
+						OrderDate = reader.GetDateTime(reader.GetOrdinal("OrderDate")),
+						CustomerType = reader.GetString(reader.GetOrdinal("CustomerType")) 
 					});
 				}
 			}
 
 			return orders;
 		}
+
 
 		private void AdminForm_FormClosing(object sender, FormClosingEventArgs e)
 		{

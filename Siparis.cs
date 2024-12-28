@@ -13,6 +13,7 @@ namespace yemeksepeti
 			public int CustemerID { get; set; }  
 			public DateTime OrderDate { get; set; }
 			public double PrioritizationScore { get; set; }
-		}
+		public string CustomerType { get; set; }
+	}
 	
 }
