@@ -10,7 +10,7 @@ namespace yemeksepeti
 		public class Siparis
 		{
 			public int OrderID { get; set; }
-			public int CustemerID { get; set; }  // Bu doğru şekilde güncellenecek
+			public int CustemerID { get; set; }  
 			public DateTime OrderDate { get; set; }
 			public double PrioritizationScore { get; set; }
 		}

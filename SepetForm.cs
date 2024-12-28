@@ -24,7 +24,7 @@ namespace yemeksepeti
 		private void SepetForm_Load(object sender, EventArgs e)
 		{
 			Sorgu sorgu = new Sorgu();
-			// Kullanıcıya özel sepet verisini yükle
+			
 			List<Sepet> sepet = SepetManager.GetSepet(userıd);
 			dataGridView1.DataSource = sepet.Select(item => new
 			{
@@ -38,7 +38,7 @@ namespace yemeksepeti
 		}
 		public void SiparisVerisiniYolla(DataTable orderData)
 		{
-			// Veriyi DataGridView'e bağlıyoruz
+			
 			dataGridView1.DataSource = orderData;
 		}
 
@@ -46,7 +46,7 @@ namespace yemeksepeti
 		{
 			try
 			{
-				List<Sepet> sepet = SepetManager.GetSepet(userıd); // Kullanıcının sepetini alıyoruz
+				List<Sepet> sepet = SepetManager.GetSepet(userıd); 
 
 				using (SqlConnection connection = new SqlConnection(Sorgu.ConnectionString))
 				{
@@ -54,25 +54,25 @@ namespace yemeksepeti
 
 					foreach (var item in sepet)
 					{
-						// Stok kontrolü yapmadan sipariş kaydediyoruz
+						
 						string query = "INSERT INTO yemeksiparis.dbo.Orders (CustemerID, ProductID, Quantity, TotalPrice, OrderDate, OrderStatus) VALUES (@UserID, @ProductID, @Quantity, @TotalPrice, @OrderDate, @OrderStatus); SELECT SCOPE_IDENTITY();";
 						SqlCommand command = new SqlCommand(query, connection);
 
-						command.Parameters.AddWithValue("@UserID", userıd); // Kullanıcı ID
+						command.Parameters.AddWithValue("@UserID", userıd); 
 						command.Parameters.AddWithValue("@ProductID", item.ProductID);
 						command.Parameters.AddWithValue("@Quantity", item.Quantity);
 						command.Parameters.AddWithValue("@TotalPrice", item.TotalPrice);
 						command.Parameters.AddWithValue("@OrderDate", DateTime.Now);
 						command.Parameters.AddWithValue("@OrderStatus", "Bekliyor");
 
-						int orderID = Convert.ToInt32(command.ExecuteScalar()); // Sipariş ID'sini alıyoruz
+						int orderID = Convert.ToInt32(command.ExecuteScalar());
 					}
 				}
 
 				MessageBox.Show("Siparişler başarıyla kaydedildi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-				SepetManager.SepetiTemizle(userıd); // Sepeti temizliyoruz
-				this.Close(); // Formu kapatıyoruz
+				SepetManager.SepetiTemizle(userıd); 
+				this.Close(); 
 			}
 			catch (Exception ex)
 			{

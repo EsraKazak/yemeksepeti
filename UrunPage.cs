@@ -48,7 +48,7 @@ namespace yemeksepeti
 				return;
 			}
 
-			// SepetItem oluştur
+			
 			Sepet yeniUrun = new Sepet
 			{
 				ProductID = urunID,
@@ -57,7 +57,7 @@ namespace yemeksepeti
 				UnitPrice = urunFiyat
 			};
 
-			// Kullanıcıya özel sepete ekle
+			
 			SepetManager.SepeteEkle(UserID, yeniUrun);
 
 			MessageBox.Show("Ürün sepete eklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);

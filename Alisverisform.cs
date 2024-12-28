@@ -16,92 +16,87 @@ namespace yemeksepeti
 {
 	public partial class Alisverisform : Form
 	{
-		private int userıd = 0;
+		private int userid = 0;
 		public Alisverisform(int id)
 		{
 			InitializeComponent();
-			this.userıd = id;
+			this.userid = id;
 		}
 
 		private void Alisverisform_Load(object sender, EventArgs e)
 		{
-			// Kullanıcı ID ile bir işlem örneği
-			MessageBox.Show($"AVM Kullanıcı ID: {userıd}");
-
-			// Kullanıcıya özel resimleri getirme işlemi
+			
 			ResimleriGetir();
+			
 		}
-		public void SetUserId(int id)
-		{
-			this.userıd = id;
-		}
+		
 
 		private void ResimleriGetir()
 		{
-			string query = Sorgu.ResimleriGetirSorgusu(); // Sorguyu Sorgu sınıfından çekiyoruz
-			using (SqlConnection connection = new SqlConnection(Sorgu.ConnectionString)) // connectionString'i Sorgu sınıfından alıyoruz
+			string query = Sorgu.ResimleriGetirSorgusu(); 
+			using (SqlConnection connection = new SqlConnection(Sorgu.ConnectionString)) 
 			{
 				SqlCommand command = new SqlCommand(query, connection);
 				connection.Open();
 
 				SqlDataReader reader = command.ExecuteReader();
 
-				// Paneldeki önceki kontrolleri temizleyelim
+				
 				panel1.Controls.Clear();
 
-				int xPos = 10; // Resmin başlangıç yatay pozisyonu
-				int yPos = 10; // Resmin başlangıç dikey pozisyonu
-				int padding = 20; // Resimler arasındaki boşluk
+				int xPos = 10; 
+				int yPos = 10; 
+				int padding = 20; 
 
 				while (reader.Read())
 				{
-					// Verileri tablodan çekiyoruz
+					
 					int urunID = Convert.ToInt32(reader["ProductID"]);
-					string resimYolu = reader["image"].ToString(); // Resim yolu
-					string productName = reader["ProductName"].ToString(); // Ürün adı
-					int stok = Convert.ToInt32(reader["Stok"]); // Stok miktarı
-					decimal price = Convert.ToDecimal(reader["Price"]); // Ürün fiyatı
+					string resimYolu = reader["image"].ToString(); 
+					string productName = reader["ProductName"].ToString();
+					int stok = Convert.ToInt32(reader["Stok"]); 
+					decimal price = Convert.ToDecimal(reader["Price"]);
 
-					// Resmi dosya yolundan yükle
+					
 					Image resim = Image.FromFile(resimYolu);
 
-					// Resim için PictureBox oluştur
+					
 					PictureBox pictureBox = new PictureBox();
 					pictureBox.Image = resim;
 					pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-					pictureBox.Size = new Size(150, 150); // Resim boyutu
-					pictureBox.Location = new Point(xPos, yPos); // Resmin konumu
+					pictureBox.Size = new Size(150, 150); 
+					pictureBox.Location = new Point(xPos, yPos); 
 
-					// Açıklamalar için Label oluştur
+					
 					Label label = new Label();
-					label.Text = $"Ürün Adı: {productName}\nStok: {stok}\nFiyat: {price:C}\nId: {userıd}";
+					label.Text = $"Ürün Adı: {productName}\nStok: {stok}\nFiyat: {price:C}\nId: {userid}";
 					label.AutoSize = false;
-					label.Size = new Size(300, 150); // Açıklama alanı genişliği
+					label.Size = new Size(300, 150); 
 					label.Font = new Font("Arial", 10, FontStyle.Regular);
 					label.TextAlign = ContentAlignment.MiddleLeft;
-					label.Location = new Point(xPos + pictureBox.Width + 20, yPos); // Resmin sağına konumlandırıldı
+					label.Location = new Point(xPos + pictureBox.Width + 20, yPos); 
 
 
 					pictureBox.Click += (s, ev) =>
 					{
-						// Detay formunu gösterelim
+						
 						UrunPage urun = new UrunPage();
-						urun.Goster(resim, productName, price, urunID, userıd); // Bilgileri geçiriyoruz
+						urun.Goster(resim, productName, price, urunID, userid); 
 
-						//this.Hide();
-						urun.ShowDialog(); // UrunPage'i modal olarak göster
-										   //this.Show(); // UrunPage kapandıktan sonra AlisverisForm'u yeniden göster
+						
+						urun.ShowDialog(); 
+										   
 					};
 
 
 
 
-					// Panel'e PictureBox ve Label ekle
+					
 					panel1.Controls.Add(pictureBox);
 					panel1.Controls.Add(label);
 
-					// Dikey pozisyonu güncelle (Bir sonraki ürün için)
-					yPos += pictureBox.Height + padding; // Bir sonraki resim altına eklenir
+					
+					yPos += pictureBox.Height + padding; 
 				}
 				reader.Close();
 			}
@@ -122,7 +117,15 @@ namespace yemeksepeti
 		private void button1_Click(object sender, EventArgs e)
 		{
 			Sorgu sorgu = new Sorgu();
-			sorgu.getorder(userıd);
+			sorgu.getorder(userid);
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			TumSiparisler tm= new TumSiparisler(userid);
+			tm.Show();
+			
+	
 		}
 	}
 }

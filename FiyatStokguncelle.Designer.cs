@@ -1,6 +1,6 @@
 ﻿namespace yemeksepeti
 {
-	partial class FiyatStok_güncelle
+	partial class FiyatStokguncelle
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FiyatStok_güncelle));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FiyatStokguncelle));
 			panel1 = new Panel();
 			textBox3 = new TextBox();
 			textBox2 = new TextBox();
@@ -48,10 +48,10 @@
 			panel1.Controls.Add(textBox1);
 			panel1.Controls.Add(dataGridView1);
 			panel1.Controls.Add(button1);
-			panel1.Location = new Point(2, -2);
+			panel1.Location = new Point(0, -1);
 			panel1.Name = "panel1";
 			panel1.Size = new Size(801, 452);
-			panel1.TabIndex = 0;
+			panel1.TabIndex = 1;
 			// 
 			// textBox3
 			// 
@@ -59,7 +59,6 @@
 			textBox3.Name = "textBox3";
 			textBox3.Size = new Size(125, 27);
 			textBox3.TabIndex = 6;
-			textBox3.TextChanged += textBox3_TextChanged;
 			// 
 			// textBox2
 			// 
@@ -76,7 +75,7 @@
 			button2.TabIndex = 3;
 			button2.Text = "Fiyat ve Stok Güncelle\r\n";
 			button2.UseVisualStyleBackColor = true;
-			button2.Click += button2_Click;
+			button2.Click += button2_Click_1;
 			// 
 			// textBox1
 			// 
@@ -106,17 +105,17 @@
 			button1.Size = new Size(85, 45);
 			button1.TabIndex = 0;
 			button1.UseVisualStyleBackColor = true;
-			button1.Click += button1_Click;
+			button1.Click += button1_Click_1;
 			// 
-			// FiyatStok_güncelle
+			// FiyatStokguncelle
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(800, 450);
 			Controls.Add(panel1);
-			Name = "FiyatStok_güncelle";
-			Text = "FiyatStok_güncelle";
-			Load += FiyatStok_güncelle_Load;
+			Name = "FiyatStokguncelle";
+			Text = "FiyatStokguncelle";
+			Load += FiyatStokguncelle_Load;
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -126,11 +125,11 @@
 		#endregion
 
 		private Panel panel1;
-		private DataGridView dataGridView1;
+		private TextBox textBox3;
 		private TextBox textBox2;
 		private Button button2;
 		private TextBox textBox1;
-		private TextBox textBox3;
+		private DataGridView dataGridView1;
 		private Button button1;
 	}
 }

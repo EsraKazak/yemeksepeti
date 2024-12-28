@@ -32,6 +32,7 @@
 			panel1 = new Panel();
 			label1 = new Label();
 			button1 = new Button();
+			button2 = new Button();
 			SuspendLayout();
 			// 
 			// panel1
@@ -68,11 +69,22 @@
 			button1.UseVisualStyleBackColor = false;
 			button1.Click += button1_Click;
 			// 
+			// button2
+			// 
+			button2.Location = new Point(531, 141);
+			button2.Name = "button2";
+			button2.Size = new Size(110, 62);
+			button2.TabIndex = 2;
+			button2.Text = "Tüm Siparişlerim";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
+			// 
 			// Alisverisform
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(653, 539);
+			Controls.Add(button2);
 			Controls.Add(label1);
 			Controls.Add(button1);
 			Controls.Add(panel1);
@@ -88,5 +100,6 @@
 		private Panel panel1;
 		private Button button1;
 		private Label label1;
+		private Button button2;
 	}
 }

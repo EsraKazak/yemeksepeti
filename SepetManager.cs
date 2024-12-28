@@ -8,10 +8,10 @@ namespace yemeksepeti
 {
 	public class SepetManager
 	{
-		// Kullanıcıların sepetlerini tutan bir sözlük
+		
 		private static Dictionary<int, List<Sepet>> sepetler = new Dictionary<int, List<Sepet>>();
 
-		// Sepete ürün ekleme
+		
 		public static void SepeteEkle(int userId, Sepet item)
 		{
 			if (!sepetler.ContainsKey(userId))
@@ -22,7 +22,7 @@ namespace yemeksepeti
 			sepetler[userId].Add(item);
 		}
 
-		// Kullanıcıya özel sepeti alma
+		
 		public static List<Sepet> GetSepet(int userId)
 		{
 			if (sepetler.ContainsKey(userId))
@@ -33,7 +33,7 @@ namespace yemeksepeti
 			return new List<Sepet>();
 		}
 
-		// Kullanıcının sepetini temizleme
+		
 		public static void SepetiTemizle(int userId)
 		{
 			if (sepetler.ContainsKey(userId))

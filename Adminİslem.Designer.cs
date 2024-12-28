@@ -29,11 +29,11 @@
 		private void InitializeComponent()
 		{
 			panel1 = new Panel();
+			progressBar1 = new ProgressBar();
 			button3 = new Button();
 			button2 = new Button();
 			button1 = new Button();
 			dataGridView1 = new DataGridView();
-			progressBar1 = new ProgressBar();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			SuspendLayout();
@@ -50,6 +50,13 @@
 			panel1.Size = new Size(959, 520);
 			panel1.TabIndex = 0;
 			// 
+			// progressBar1
+			// 
+			progressBar1.Location = new Point(804, 26);
+			progressBar1.Name = "progressBar1";
+			progressBar1.Size = new Size(155, 29);
+			progressBar1.TabIndex = 4;
+			// 
 			// button3
 			// 
 			button3.Location = new Point(809, 399);
@@ -62,16 +69,17 @@
 			// 
 			// button2
 			// 
-			button2.Location = new Point(809, 364);
+			button2.Location = new Point(809, 334);
 			button2.Name = "button2";
-			button2.Size = new Size(140, 29);
+			button2.Size = new Size(140, 59);
 			button2.TabIndex = 2;
-			button2.Text = "Ürün Ekle\r\n";
+			button2.Text = "Ürün Ekle\r\n Sil";
 			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// button1
 			// 
-			button1.Location = new Point(809, 329);
+			button1.Location = new Point(809, 299);
 			button1.Name = "button1";
 			button1.Size = new Size(140, 29);
 			button1.TabIndex = 1;
@@ -87,13 +95,6 @@
 			dataGridView1.RowHeadersWidth = 51;
 			dataGridView1.Size = new Size(800, 520);
 			dataGridView1.TabIndex = 0;
-			// 
-			// progressBar1
-			// 
-			progressBar1.Location = new Point(804, 26);
-			progressBar1.Name = "progressBar1";
-			progressBar1.Size = new Size(155, 29);
-			progressBar1.TabIndex = 4;
 			// 
 			// Adminİslem
 			// 

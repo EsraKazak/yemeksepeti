@@ -12,9 +12,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace yemeksepeti
 {
-	public partial class FiyatStok_güncelle : Form
+	public partial class FiyatStokguncelle : Form
 	{
-		public FiyatStok_güncelle()
+		public FiyatStokguncelle()
 		{
 			InitializeComponent();
 			urungoruntuleme();
@@ -27,7 +27,7 @@ namespace yemeksepeti
 			admn.Show();
 		}
 
-		private void FiyatStok_güncelle_Load(object sender, EventArgs e)
+		private void FiyatStokguncelle_Load(object sender, EventArgs e)
 		{
 
 		}
@@ -35,7 +35,7 @@ namespace yemeksepeti
 
 
 
-		// Bağlantı dizesini döndüren bir özellik ekliyoruz
+		
 		public static string ConnectionString
 		{
 			get { return connectionString; }
@@ -43,7 +43,7 @@ namespace yemeksepeti
 
 		private void urungoruntuleme()
 		{
-			// Veritabanından malzeme bilgilerini çekme
+			
 			string query = "SELECT  ProductID ,ProductName ,Stok,Price FROM yemeksiparis.dbo.Products";
 
 			using (SqlConnection connection = new SqlConnection(connectionString))
@@ -55,7 +55,7 @@ namespace yemeksepeti
 				DataTable malzemeTable = new DataTable();
 				adapter.Fill(malzemeTable);
 
-				// DataGridView'ı doldurma
+				
 				dataGridView1.DataSource = malzemeTable;
 
 			}
@@ -63,23 +63,23 @@ namespace yemeksepeti
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			// Seçilen hücreyi kontrol et
+			
 			if (dataGridView1.SelectedCells.Count > 0)
 			{
-				// Seçilen hücreyi al
+				
 				DataGridViewCell selectedCell = dataGridView1.SelectedCells[0];
 
-				// ProductID'yi al
+				
 				int productId = Convert.ToInt32(dataGridView1.Rows[selectedCell.RowIndex].Cells["ProductID"].Value);
 
-				// Yeni değerleri al
-				string yeniStok = textBox2.Text; // Yeni stok miktarı
-				string yeniFiyat = textBox3.Text; // Yeni fiyat
+				
+				string yeniStok = textBox2.Text; 
+				string yeniFiyat = textBox3.Text; 
 
-				// Güncelleme sorgusu oluştur
+				
 				string query = "UPDATE yemeksiparis.dbo.Products SET ";
 
-				// Güncellenecek alanları kontrol et
+				
 				if (!string.IsNullOrEmpty(yeniStok))
 				{
 					query += "Stok = @yeniStok ";
@@ -89,14 +89,14 @@ namespace yemeksepeti
 				{
 					if (!string.IsNullOrEmpty(yeniStok))
 					{
-						query += ", "; // Eğer hem stok hem de fiyat güncelleniyorsa araya virgül ekle
+						query += ", "; 
 					}
 					query += "Price = @yeniFiyat ";
 				}
 
 				query += "WHERE ProductID = @productId";
 
-				// Veritabanı işlemleri
+			
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					using (SqlCommand command = new SqlCommand(query, connection))
@@ -144,12 +144,12 @@ namespace yemeksepeti
 		}
 
 		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-		{	
+		{
 			textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
 			textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
 			textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-			
-			
+
+
 		}
 
 		private void textBox3_TextChanged(object sender, EventArgs e)
@@ -159,30 +159,116 @@ namespace yemeksepeti
 
 		private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
-			// Stok sütunu kontrolü (2. sütun - Stok)
+			
 			if (dataGridView1.Columns[e.ColumnIndex].Name == "Stok" && e.Value != null)
 			{
 				int stokMiktar;
 
-				// Stok değeri bir sayı mı kontrol et
+				
 				if (int.TryParse(e.Value.ToString(), out stokMiktar))
 				{
-					// Stok miktarına göre renk belirleme
+					
 					if (stokMiktar == 0)
 					{
-						e.CellStyle.ForeColor = Color.Red; // Stok 0 ise kırmızı
+						e.CellStyle.ForeColor = Color.Red; 
 					}
 					else if (stokMiktar < 3)
 					{
-						e.CellStyle.ForeColor = Color.Blue; // Stok 3'ün altındaysa mavi
+						e.CellStyle.ForeColor = Color.Blue; 
 					}
 					else
 					{
-						e.CellStyle.ForeColor = Color.Black; // Diğer durumlarda siyah
+						e.CellStyle.ForeColor = Color.Black; 
 					}
 				}
 			}
 		}
 
+		private void button1_Click_1(object sender, EventArgs e)
+		{
+			Adminİslem admn = new Adminİslem();
+			this.Close();
+			admn.Show();
+		}
+
+		private void button2_Click_1(object sender, EventArgs e)
+		{
+			
+			if (dataGridView1.SelectedCells.Count > 0)
+			{
+				
+				DataGridViewCell selectedCell = dataGridView1.SelectedCells[0];
+
+				
+				int productId = Convert.ToInt32(dataGridView1.Rows[selectedCell.RowIndex].Cells["ProductID"].Value);
+
+				
+				string yeniStok = textBox2.Text; 
+				string yeniFiyat = textBox3.Text;
+
+				
+				string query = "UPDATE yemeksiparis.dbo.Products SET ";
+
+				
+				if (!string.IsNullOrEmpty(yeniStok))
+				{
+					query += "Stok = @yeniStok ";
+				}
+
+				if (!string.IsNullOrEmpty(yeniFiyat))
+				{
+					if (!string.IsNullOrEmpty(yeniStok))
+					{
+						query += ", "; 
+					}
+					query += "Price = @yeniFiyat ";
+				}
+
+				query += "WHERE ProductID = @productId";
+
+				
+				using (SqlConnection connection = new SqlConnection(connectionString))
+				{
+					using (SqlCommand command = new SqlCommand(query, connection))
+					{
+						
+						if (!string.IsNullOrEmpty(yeniStok))
+						{
+							command.Parameters.AddWithValue("@yeniStok", yeniStok);
+						}
+
+						if (!string.IsNullOrEmpty(yeniFiyat))
+						{
+							command.Parameters.AddWithValue("@yeniFiyat", yeniFiyat);
+						}
+
+						command.Parameters.AddWithValue("@productId", productId);
+
+						try
+						{
+							connection.Open();
+							int rowsAffected = command.ExecuteNonQuery();
+							if (rowsAffected > 0)
+							{
+								MessageBox.Show("Güncelleme başarılı!");
+								urungoruntuleme();
+							}
+							else
+							{
+								MessageBox.Show("Güncelleme başarısız, ürün bulunamadı.");
+							}
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show("Hata: " + ex.Message);
+						}
+					}
+				}
+			}
+			else
+			{
+				MessageBox.Show("Lütfen bir hücre seçin.");
+			}
+		}
 	}
 }

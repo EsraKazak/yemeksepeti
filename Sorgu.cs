@@ -28,7 +28,7 @@ namespace yemeksepeti
 
 		public bool ValidateUser(string username, string password, out int userId)
 		{
-			userId = 0; // Varsayılan değer, kullanıcı bulunamazsa 0 dönecek
+			userId = 0; 
 			string query = "SELECT CustomerID FROM yemeksiparis.dbo.Custemers WHERE CustomerName = @Username AND CustomerPassword = @Password";
 
 			using (SqlConnection con = new SqlConnection(connectionString))
@@ -38,21 +38,21 @@ namespace yemeksepeti
 					con.Open();
 					SqlCommand cmd = new SqlCommand(query, con);
 
-					// Parametreleri ekleyelim
+					
 					cmd.Parameters.AddWithValue("@Username", username);
 					cmd.Parameters.AddWithValue("@Password", password);
 
-					// Sorguyu çalıştırıp sonucu alalım
+					
 					var result = cmd.ExecuteScalar();
 
-					// Eğer sorgu bir sonuç döndürdüyse
+					
 					if (result != null)
 					{
-						userId = Convert.ToInt32(result); // Kullanıcı ID'sini döndür
-						return true; // Kullanıcı doğrulandı
+						userId = Convert.ToInt32(result); 
+						return true; 
 					}
 
-					return false; // Kullanıcı bulunamadı
+					return false; 
 				}
 				catch (Exception ex)
 				{
@@ -63,38 +63,54 @@ namespace yemeksepeti
 
 
 
-		public bool SiparisEkleme(int customerId, int productId, int quantity, decimal totalPrice)
+		public static bool UrunEkle(string urunAdi, string urunfiyat, string urunstok, string resimyolu)
+		{
+
+			string query = "INSERT INTO yemeksiparis.dbo.Products (ProductName, Stok, Price, image) " +
+						   "VALUES (@urunAdi, @urunfiyat, @urunstok, @resim);"; 
+
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				using (SqlCommand cmd = new SqlCommand(query, conn))
+				{
+					cmd.Parameters.AddWithValue("@urunAdi", urunAdi);
+					cmd.Parameters.AddWithValue("@urunfiyat", urunfiyat);
+					cmd.Parameters.AddWithValue("@urunstok", urunstok);
+					cmd.Parameters.AddWithValue("@resim", resimyolu);
+					
+
+					conn.Open();
+					
+					object result = cmd.ExecuteScalar();
+					
+
+					return true;
+				}
+			}
+		}
+
+		public static bool UrunSil(int urunID)
 		{
 			try
 			{
-				using (SqlConnection connection = new SqlConnection(connectionString))
+				string query = "DELETE FROM yemeksiparis.dbo.Products WHERE ProductID = @ProductID";
+				using (SqlConnection connection = new SqlConnection(ConnectionString))
 				{
+					SqlCommand command = new SqlCommand(query, connection);
+					command.Parameters.AddWithValue("@ProductID", urunID);
 					connection.Open();
-
-					string query = @"
-                        INSERT INTO yemeksiparis.dbo.Orders (CustemerID, ProductID, Quantity, TotalPrice, OrderDate, OrderStatus) 
-                        VALUES (@CustomerID, @ProductID, @Quantity, @TotalPrice, @OrderDate, @OrderStatus)";
-
-					using (SqlCommand cmd = new SqlCommand(query, connection))
-					{
-						cmd.Parameters.AddWithValue("@CustomerID", customerId);
-						cmd.Parameters.AddWithValue("@ProductID", productId);
-						cmd.Parameters.AddWithValue("@Quantity", quantity);
-						cmd.Parameters.AddWithValue("@TotalPrice", totalPrice);
-						cmd.Parameters.AddWithValue("@OrderDate", DateTime.Now); 
-						cmd.Parameters.AddWithValue("@OrderStatus", "Bekliyor"); 
-
-						int rowsAffected = cmd.ExecuteNonQuery(); // Veritabanına veri ekle
-						return rowsAffected > 0; 
-					}
+					int rowsAffected = command.ExecuteNonQuery();
+					return rowsAffected > 0; 
 				}
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Veritabanı hatası: {ex.Message}");
-				return false; 
+				MessageBox.Show("Silme işlemi sırasında hata oluştu: " + ex.Message);
+				return false;
 			}
 		}
+
+		
 
 		public bool ValidateAdmin(string username, string password)
 		{
@@ -109,18 +125,18 @@ namespace yemeksepeti
 					con.Open();
 					SqlCommand cmd = new SqlCommand(query, con);
 
-					// Parametreleri ekleyelim
+					
 					cmd.Parameters.AddWithValue("@Username", username);
 					cmd.Parameters.AddWithValue("@Password", password);
 
-					// Sorguyu çalıştırıp sonucu alalım
+					
 					int result = Convert.ToInt32(cmd.ExecuteScalar());
 
 					return result == 1;
 				}
 				catch (Exception ex)
 				{
-					// Hata durumunda false döndür
+					
 					throw new Exception("Veritabanı hatası: " + ex.Message);
 				}
 			}
@@ -130,7 +146,7 @@ namespace yemeksepeti
 		public void getorder(int userdID)
 		{
 			this.userıd=userdID;
-			// SQL Sorgusu
+			
 			string query = @"
             SELECT 
                 p.ProductName,
@@ -148,11 +164,11 @@ namespace yemeksepeti
 			{
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
-					connection.Open(); // Bağlantıyı açıyoruz
+					connection.Open(); 
 
 					using (SqlCommand command = new SqlCommand(query, connection))
 					{
-						// Parametreyi ekliyoruz
+						
 						command.Parameters.AddWithValue("@CustomerID", userdID);
 
 						using (SqlDataReader reader = command.ExecuteReader())
@@ -160,7 +176,7 @@ namespace yemeksepeti
 							DataTable dt = new DataTable();
 							dt.Load(reader);
 
-							// Veriyi başka bir forma gönderiyoruz
+							
 							SepetForm detayForm = new SepetForm(userdID);
 							detayForm.SiparisVerisiniYolla(dt);
 							detayForm.Show();

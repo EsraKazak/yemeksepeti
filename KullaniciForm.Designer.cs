@@ -1,6 +1,6 @@
 ﻿namespace yemeksepeti
 {
-	partial class KullanıcıForm
+	partial class KullaniciForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(KullanıcıForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(KullaniciForm));
 			panel1 = new Panel();
 			button1 = new Button();
 			textBox2 = new TextBox();
