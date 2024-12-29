@@ -101,7 +101,7 @@ namespace yemeksepeti
 				{
 					using (SqlCommand command = new SqlCommand(query, connection))
 					{
-						// Parametreleri ekle
+						
 						if (!string.IsNullOrEmpty(yeniStok))
 						{
 							command.Parameters.AddWithValue("@yeniStok", yeniStok);
@@ -121,7 +121,7 @@ namespace yemeksepeti
 							if (rowsAffected > 0)
 							{
 								MessageBox.Show("Güncelleme başarılı!");
-								urungoruntuleme(); // Güncellenen ürün listesini tekrar yükle
+								urungoruntuleme(); 
 							}
 							else
 							{

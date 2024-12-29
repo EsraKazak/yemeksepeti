@@ -28,7 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminUrunEkleSil));
 			panel1 = new Panel();
+			button3 = new Button();
+			button2 = new Button();
 			button1 = new Button();
 			textBox3 = new TextBox();
 			textBox2 = new TextBox();
@@ -41,13 +44,13 @@
 			panel2 = new Panel();
 			pictureBox1 = new PictureBox();
 			panel3 = new Panel();
-			button2 = new Button();
 			panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			SuspendLayout();
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(button3);
 			panel1.Controls.Add(button2);
 			panel1.Controls.Add(button1);
 			panel1.Controls.Add(textBox3);
@@ -64,6 +67,27 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(801, 211);
 			panel1.TabIndex = 0;
+			// 
+			// button3
+			// 
+			button3.BackgroundImage = (Image)resources.GetObject("button3.BackgroundImage");
+			button3.BackgroundImageLayout = ImageLayout.Stretch;
+			button3.Location = new Point(704, 8);
+			button3.Name = "button3";
+			button3.Size = new Size(83, 48);
+			button3.TabIndex = 12;
+			button3.UseVisualStyleBackColor = true;
+			button3.Click += button3_Click;
+			// 
+			// button2
+			// 
+			button2.Location = new Point(410, 152);
+			button2.Name = "button2";
+			button2.Size = new Size(94, 29);
+			button2.TabIndex = 11;
+			button2.Text = "Ürün Sil";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// button1
 			// 
@@ -166,16 +190,6 @@
 			panel3.Size = new Size(798, 280);
 			panel3.TabIndex = 1;
 			// 
-			// button2
-			// 
-			button2.Location = new Point(410, 152);
-			button2.Name = "button2";
-			button2.Size = new Size(94, 29);
-			button2.TabIndex = 11;
-			button2.Text = "Ürün Sil";
-			button2.UseVisualStyleBackColor = true;
-			button2.Click += button2_Click;
-			// 
 			// AdminUrunEkleSil
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
@@ -208,5 +222,6 @@
 		private Button button1;
 		private Panel panel3;
 		private Button button2;
+		private Button button3;
 	}
 }

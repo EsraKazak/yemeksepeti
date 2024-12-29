@@ -11,10 +11,10 @@ namespace yemeksepeti
 {
 	public partial class Adminİslem : Form
 	{
-		private static SemaphoreSlim semaphore = new SemaphoreSlim(2);  
+		private static SemaphoreSlim semaphore = new SemaphoreSlim(2);
 		private Thread refreshThread;
 		private bool isThreadRunning;
-
+		
 		public Adminİslem()
 		{
 			InitializeComponent();
@@ -44,16 +44,16 @@ namespace yemeksepeti
 		{
 			List<Siparis> orders = GetOrdersFromDatabase();
 
-			
+
 			foreach (var order in orders)
 			{
 				order.PrioritizationScore = oncelikhesapla(order.CustemerID, order.OrderDate);
 			}
 
-			
+
 			var orderedByPriority = orders.OrderByDescending(o => o.PrioritizationScore).ToList();
 
-			
+
 			Invoke((MethodInvoker)delegate
 			{
 				dataGridView1.DataSource = orderedByPriority;
@@ -70,7 +70,7 @@ namespace yemeksepeti
 		{
 			List<Siparis> orders = new List<Siparis>();
 
-			
+
 			string query = @"
         SELECT o.OrderID, o.CustemerID, o.OrderDate, c.CustomerType 
         FROM yemeksiparis.dbo.Orders o
@@ -90,7 +90,7 @@ namespace yemeksepeti
 						OrderID = reader.GetInt32(reader.GetOrdinal("OrderID")),
 						CustemerID = reader.GetInt32(reader.GetOrdinal("CustemerID")),
 						OrderDate = reader.GetDateTime(reader.GetOrdinal("OrderDate")),
-						CustomerType = reader.GetString(reader.GetOrdinal("CustomerType")) 
+						CustomerType = reader.GetString(reader.GetOrdinal("CustomerType"))
 					});
 				}
 			}
@@ -112,10 +112,10 @@ namespace yemeksepeti
 		{
 			var orders = GetOrdersFromDatabase();
 
-			
+
 			foreach (var order in orders)
 			{
-				
+
 				order.PrioritizationScore = oncelikhesapla(order.CustemerID, order.OrderDate);
 			}
 
@@ -123,13 +123,13 @@ namespace yemeksepeti
 			progressBar1.Maximum = 100;
 			progressBar1.Value = 0;
 
-			
+
 			var sortedOrders = orders.OrderByDescending(o => o.PrioritizationScore).ToList();
 
 
 
 
-			
+
 			foreach (var order in sortedOrders)
 			{
 				int orderId = order.OrderID;
@@ -143,31 +143,31 @@ namespace yemeksepeti
 
 		private double oncelikhesapla(int customerId, DateTime orderDate)
 		{
-			
-			int basicPriorityScore = GetCustomerPriority(customerId);
 
-			
+			int basicPriorityScore = GetCustomerOncelik(customerId);
+
+
 			TimeSpan waitingTime = DateTime.Now - orderDate;
 
-			
+
 			double waitingTimeWeight = 0.5;
 
-			
+
 			double prioritizationScore = basicPriorityScore + (waitingTime.TotalSeconds * waitingTimeWeight);
 
 			return prioritizationScore;
 		}
 
-		private int GetCustomerPriority(int customerId)
+		private int GetCustomerOncelik(int customerId)
 		{
-			
+
 			string query = "SELECT CustomerType FROM yemeksiparis.dbo.Custemers WHERE CustomerID = @CustomerID";
-			int priorityScore = 10;  
+			int priorityScore = 10;
 
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				SqlCommand command = new SqlCommand(query, connection);
-				command.Parameters.AddWithValue("@CustomerID", customerId); 
+				command.Parameters.AddWithValue("@CustomerID", customerId);
 				connection.Open();
 
 				object result = command.ExecuteScalar();
@@ -176,7 +176,7 @@ namespace yemeksepeti
 					string customerType = result.ToString();
 					if (customerType == "Premium")
 					{
-						priorityScore = 15; 
+						priorityScore = 15;
 					}
 				}
 			}
@@ -194,25 +194,25 @@ namespace yemeksepeti
 			{
 				for (int i = 0; i <= 100; i += 20)
 				{
-				
+
 					progressBar1.Value = i;
 					progressBar1.Refresh();
 
-					
-					await Task.Delay(500); 
+
+					await Task.Delay(500);
 				}
 
-				
+
 				if (!IsOrderProcessable(orderId, customerId, out string failureReason))
 				{
 					MessageBox.Show($"Sipariş {orderId} onaylanmadı: {failureReason}", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-					
+
 					AddLog(customerId, DateTime.Now, "Hata", failureReason, orderId);
 					return;
 				}
 
-				
+
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					string query = "UPDATE yemeksiparis.dbo.Orders SET OrderStatus = 'Onaylandı' WHERE OrderID = @OrderID";
@@ -223,35 +223,35 @@ namespace yemeksepeti
 					command.ExecuteNonQuery();
 				}
 
-				
+
 				UpdateStock(orderId);
 
-				
+
 				double totalOrderPrice = GetOrderTotalPrice(orderId);
 				UpdateCustomerBudget(customerId, totalOrderPrice);
 
-				
+
 				AddLog(customerId, DateTime.Now, "Bilgi", $"Sipariş {orderId} başarıyla onaylandı.", orderId);
 
 				MessageBox.Show($"Sipariş {orderId} onaylandı ve işlemler tamamlandı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			catch (Exception ex)
 			{
-				
+
 				AddLog(customerId, DateTime.Now, "Hata", $"Sipariş {orderId} onaylanırken hata oluştu: {ex.Message}", orderId);
 
 				MessageBox.Show($"Sipariş onaylanırken hata oluştu: {ex.Message}");
 			}
 			finally
 			{
-				semaphore.Release(); 
+				semaphore.Release();
 			}
 
-			
+
 			RefreshOrders();
 		}
 
-		
+
 		private void AddLog(int customerId, DateTime logDate, string logType, string logDetails, int orderId)
 		{
 			try
@@ -275,7 +275,7 @@ namespace yemeksepeti
 			}
 			catch (Exception ex)
 			{
-				
+
 				MessageBox.Show($"Log kaydedilirken hata oluştu: {ex.Message}");
 			}
 		}
@@ -350,7 +350,7 @@ namespace yemeksepeti
 					object result = command.ExecuteScalar();
 					if (result != DBNull.Value)
 					{
-						budget = Convert.ToDouble(result); 
+						budget = Convert.ToDouble(result);
 					}
 				}
 				catch (Exception ex)
@@ -362,7 +362,7 @@ namespace yemeksepeti
 			return budget;
 		}
 
-		
+
 		private double GetOrderTotalPrice(int orderId)
 		{
 			string query = "SELECT TotalPrice FROM yemeksiparis.dbo.Orders WHERE OrderID = @OrderID";
@@ -373,13 +373,13 @@ namespace yemeksepeti
 				try
 				{
 					SqlCommand command = new SqlCommand(query, connection);
-					command.Parameters.AddWithValue("@OrderID", orderId); 
+					command.Parameters.AddWithValue("@OrderID", orderId);
 
 					connection.Open();
 					object result = command.ExecuteScalar();
 					if (result != DBNull.Value)
 					{
-						totalPrice = Convert.ToDouble(result); 
+						totalPrice = Convert.ToDouble(result);
 					}
 				}
 				catch (Exception ex)
@@ -424,7 +424,7 @@ namespace yemeksepeti
 		{
 			failureReason = string.Empty;
 
-			
+
 			double customerBudget = GetCustomerBudget(customerId);
 			double totalOrderPrice = GetOrderTotalPrice(orderId);
 
@@ -434,14 +434,14 @@ namespace yemeksepeti
 				return false;
 			}
 
-			
+
 			if (!IsStockSufficient(orderId, out string stockIssue))
 			{
 				failureReason = stockIssue;
 				return false;
 			}
 
-			return true; 
+			return true;
 		}
 
 		private bool IsStockSufficient(int orderId, out string failureReason)
@@ -476,7 +476,7 @@ namespace yemeksepeti
 				}
 			}
 
-			return true; 
+			return true;
 		}
 
 		private void button3_Click(object sender, EventArgs e)
@@ -488,9 +488,14 @@ namespace yemeksepeti
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			AdminUrunEkleSil admn= new AdminUrunEkleSil();
+			AdminUrunEkleSil admn = new AdminUrunEkleSil();
 			this.Close();
 			admn.Show();
+		}
+
+		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+
 		}
 	}
 }
