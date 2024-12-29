@@ -66,7 +66,7 @@ namespace yemeksepeti
 		public static bool UrunEkle(string urunAdi, string urunfiyat, string urunstok, string resimyolu)
 		{
 
-			string query = "INSERT INTO yemeksiparis.dbo.Products (ProductName, Stok, Price, image) " +
+			string query = "INSERT INTO yemeksiparis.dbo.Products (ProductName, Price, Stok, image) " +
 						   "VALUES (@urunAdi, @urunfiyat, @urunstok, @resim);"; 
 
 			using (SqlConnection conn = new SqlConnection(connectionString))

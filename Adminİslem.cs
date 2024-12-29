@@ -259,7 +259,7 @@ namespace yemeksepeti
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					string query = @"
-                INSERT INTO yemeksiparis.dbo.Log (CustemerID, LogDate, LogType, LogDetails, OrderID) 
+                INSERT INTO yemeksiparis.dbo.Log (CustomerID, LogDate, LogType, LogDetails, OrderID) 
                 VALUES (@CustomerID, @LogDate, @LogType, @LogDetails, @OrderID)";
 
 					SqlCommand command = new SqlCommand(query, connection);

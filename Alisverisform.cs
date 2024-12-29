@@ -69,7 +69,7 @@ namespace yemeksepeti
 
 					
 					Label label = new Label();
-					label.Text = $"Ürün Adı: {productName}\nStok: {stok}\nFiyat: {price:C}\nId: {userid}";
+					label.Text = $"Ürün Adı: {productName}\nStok: {stok}\nFiyat: {price:C}";
 					label.AutoSize = false;
 					label.Size = new Size(300, 150); 
 					label.Font = new Font("Arial", 10, FontStyle.Regular);
